@@ -2,3 +2,9 @@
 NOTEBOOKLM_IDS.local.md
 CODEX_NOTEBOOKLM_RULES.local.md
 CODEX_NOTEBOOKLM_RULES.md
+
+# Node / build outputs
+node_modules
+dist
+dist-electron
+.vite

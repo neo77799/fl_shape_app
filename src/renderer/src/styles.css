@@ -1,0 +1,19 @@
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Arial,
+    "Noto Sans", "Liberation Sans", sans-serif;
+  background: #0b0f14;
+  color: #e6edf3;
+}
+
+.app {
+  min-height: 100%;
+  display: grid;
+  place-items: center;
+}
+
