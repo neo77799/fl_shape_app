@@ -37,9 +37,23 @@ npm run start
 
 ## 使い方
 
-1. アプリで `Load SVG` からSVGを選択
+ホーム画面から機能を選びます。
+
+### SVG To FL Shape
+
+1. `Load SVG` からSVGを選択
 2. `Copy As Shape` を押してクリップボードへコピー
 3. Flash Professional 8 で `Ctrl+V` で貼り付け
+
+### FL Shape To SVG
+
+1. Flash Professional 8 でシェイプをコピー（`Ctrl+C`）
+2. アプリで `Paste FL Shape`（クリップボードの EMF/WMF を SVG に変換）
+3. `Copy SVG Text` または `Save SVG`
+
+### Debug: Clipboard Formats
+
+Flash 側の貼り付け互換調査用に、`Settings` → `Clipboard Formats` で現在のクリップボード形式一覧を確認できます。
 
 ## Inkscape の検出
 
@@ -83,4 +97,3 @@ setx INKSCAPE_PATH "C:\Program Files\Inkscape\bin\inkscape.com"
 ## 開発メモ
 
 - 環境によって `ELECTRON_RUN_AS_NODE=1` が設定されていると Electron GUI 起動が壊れるため、`scripts/run-electron.cjs` でその環境変数を外して起動します。
-

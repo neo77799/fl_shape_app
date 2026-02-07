@@ -3,6 +3,9 @@ import path from "node:path";
 
 export type AppSettings = {
   inkscapePath?: string;
+  flToSvgPrefer?: "emf" | "wmf";
+  flash8ExePath?: string;
+  ffdecJarPath?: string;
 };
 
 export async function readSettings(userDataDir: string): Promise<AppSettings> {
@@ -23,4 +26,3 @@ export async function writeSettings(userDataDir: string, next: AppSettings): Pro
   await fs.writeFile(tmp, raw, "utf8");
   await fs.rename(tmp, p);
 }
-
