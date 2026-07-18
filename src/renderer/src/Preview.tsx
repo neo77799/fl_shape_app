@@ -171,7 +171,7 @@ export default function Preview(props: { svgText: string }) {
         onPointerCancel={onPointerUp}
         onDoubleClick={fitToView}
         role="application"
-        aria-label="SVG preview"
+        aria-label="SVGプレビュー"
       >
         <div
           className="previewContent"
@@ -189,7 +189,7 @@ export default function Preview(props: { svgText: string }) {
           />
         </div>
       </div>
-      <div className="previewHelp">Wheel: zoom / Drag: pan / Double-click: fit</div>
+      <div className="previewHelp">ホイール: 拡大・縮小 / ドラッグ: 移動 / ダブルクリック: 全体表示</div>
     </div>
   );
 }

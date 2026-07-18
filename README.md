@@ -1,99 +1,46 @@
-﻿# fl_shape_app
+# fl_shape_app
 
-Windows 用の小さなデスクトップアプリです。
+SVGをFlash Professional 8へベクターシェイプとして貼り付けるためのWindowsデスクトップアプリです。
 
-- 入力: SVG
-- 出力: Flash Professional 8 で `Ctrl+V` で貼り付けられる “ベクター(シェイプ)” を目指す
-
-現状の実装は **SVG を EMF に変換して、Windows クリップボードへ EMF としてコピー**します。
-
-## 要件
+## 必要なもの
 
 - Windows
-- Node.js / npm（このリポジトリは npm 前提）
-- Inkscape（`Copy As Shape` に必須。SVG→EMF 変換に使用）
+- Node.js / npm
+- Inkscape
 
-## セットアップ
+## セットアップと起動
 
 ```powershell
-Set-Location d:\Flash_dev\fl_shape_app
+Set-Location D:\dev\fl_shape_app
 npm install
-```
-
-## 起動（開発）
-
-```powershell
-Set-Location d:\Flash_dev\fl_shape_app
 npm run dev
 ```
 
-## 起動（ビルド後）
+ビルド後に起動する場合:
 
 ```powershell
-Set-Location d:\Flash_dev\fl_shape_app
 npm run build
 npm run start
 ```
 
 ## 使い方
 
-ホーム画面から機能を選びます。
+1. `SVGを開く`、または画面へのドロップでSVGを読み込む
+2. プレビューを確認する
+3. `Flash用にコピー`を押す
+4. Flash Professional 8で`Ctrl+V`する
 
-### SVG To FL Shape
+プレビューはホイールで拡大・縮小、ドラッグで移動、ダブルクリックで全体表示できます。
 
-1. `Load SVG` からSVGを選択
-2. `Copy As Shape` を押してクリップボードへコピー
-3. Flash Professional 8 で `Ctrl+V` で貼り付け
+## 変換の仕組み
 
-### FL Shape To SVG
+SVGをSVGOで最適化し、Inkscape CLIでEMFへ変換します。そのEMFをPowerShellとWin32 APIを使ってWindowsクリップボードへ`CF_ENHMETAFILE`として設定します。
 
-1. Flash Professional 8 でシェイプをコピー（`Ctrl+C`）
-2. アプリで `Paste FL Shape`（クリップボードの EMF/WMF を SVG に変換）
-3. `Copy SVG Text` または `Save SVG`
+Inkscapeは以下の順で検出します。
 
-### Debug: Clipboard Formats
+1. 画面右下で選択したパス
+2. 環境変数`INKSCAPE_PATH`
+3. 標準的なインストール先
+4. `where.exe inkscape`
 
-Flash 側の貼り付け互換調査用に、`Settings` → `Clipboard Formats` で現在のクリップボード形式一覧を確認できます。
-
-## Inkscape の検出
-
-アプリは次の順で Inkscape を探します。
-
-- 環境変数 `INKSCAPE_PATH`（推奨: 確実）
-- 典型パス（例: `C:\Program Files\Inkscape\bin\inkscape.com`）
-- `where.exe inkscape`
-
-### 例: INKSCAPE_PATH を一時的に設定して起動
-
-```powershell
-$env:INKSCAPE_PATH="C:\Program Files\Inkscape\bin\inkscape.com"
-npm run dev
-```
-
-### 例: INKSCAPE_PATH を恒久的に設定
-
-```powershell
-setx INKSCAPE_PATH "C:\Program Files\Inkscape\bin\inkscape.com"
-```
-
-設定後はアプリを再起動してください。
-
-## 仕組み（概要）
-
-- Electron main 側で SVG を SVGO で軽く正規化
-- Inkscape CLI で EMF を生成
-- `scripts/set-clipboard-emf.ps1` が Win32 API で `CF_ENHMETAFILE` としてクリップボードにセット
-
-## トラブルシュート
-
-- `Inkscape が見つかりません`:
-  - Inkscape をインストールする
-  - もしくは `INKSCAPE_PATH` を設定する
-- `where.exe inkscape` が見つからない:
-  - Inkscape インストーラで PATH 追加を選ぶ（もしくは `INKSCAPE_PATH` を使う）
-- PowerShell 実行制限が気になる:
-  - 本アプリは `powershell.exe -ExecutionPolicy Bypass` で `scripts/set-clipboard-emf.ps1` を実行します
-
-## 開発メモ
-
-- 環境によって `ELECTRON_RUN_AS_NODE=1` が設定されていると Electron GUI 起動が壊れるため、`scripts/run-electron.cjs` でその環境変数を外して起動します。
+設定したパスはElectronのユーザーデータ領域に保存されます。
